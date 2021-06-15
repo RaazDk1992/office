@@ -1,0 +1,16 @@
+<html>
+    {% if ref == setup %}
+                           
+    <div id="guide_actions" class="alert alert-success col-sm-4" style="position: fixed; top: 10%; right: 2%;">
+        {{request.session.refer}} >> <span>कार्यालय थप <span id="info" style="position: absolute; right: 10%;">,&nbsp; यो कार्य Settings <i class="fa fa-gear"></i> बाट पनि गर्न सकिन्छ।</span> </span>
+       <form action="navigate" method="POST">
+          {% csrf_token %}
+           <input type="hidden" name="step" value="{{request.session.stage}}"/>
+           <input type="hidden" name="des" id="des"/>
+           <input class="decision" type="submit"  class = "btn btn-success" name="finish" value="अगाडी बढ्नुहोस्"/>
+           &nbsp;<input class = "decision" type="submit" class="btn btn-danger" name="decline" value="निर्देशन आवश्यक छैन"/>
+       </form>
+      </div>
+    {% endif %}
+
+</html>

@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>IPT</title>
+  <script src="{% static 'scripts/jquery.js' %} "></script>   
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+<link rel="stylesheet" href="{% static 'ipt/homestyle.css' %}">
+<link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
+
+</head>
+<body>
+
+
+<!--PEN HEADER-->
+
+<!--PEN CONTENT     -->
+<div class="content">
+  <!--content inner-->
+  <div class="content__inner">
+    <div class="container">
+      <!--content title-->
+      <!--animations form-->
+      <form class="pick-animation my-4" style="visibility: hidden;">
+        <div class="form-row">
+          <div class="col-5 m-auto">
+            <select class="pick-animation__select form-control">
+              <option value="scaleIn" >ScaleIn</option>
+              <option value="scaleOut">ScaleOut</option>
+              <option value="slideHorz" selected="selected">SlideHorz</option>
+              <option value="slideVert">SlideVert</option>
+              <option value="fadeIn">FadeIn</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <!--content title-->
+     
+    </div>
+    <div class="container overflow-hidden">
+      <!--multisteps-form-->
+      <div class="multisteps-form">
+        <!--progress bar-->
+        <div class="row">
+          <div class="col-12 col-lg-8 ml-auto mr-auto mb-4">
+            <div class="multisteps-form__progress">
+              <button class="multisteps-form__progress-btn js-active" type="button" title="User Info">ब्यक्तिगत विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Address">पारिवारिक विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Order Info">भुमी सम्बन्धि विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Comments">भौतिक संरचना        </button>
+            </div>
+          </div>
+        </div>
+        <!--form panels-->
+        <div class="row">
+          <div class="col-12 col-lg-8 m-auto">
+            <form id="personal_details_f" class="multisteps-form__form" action="personalinfo" method="POST">
+              {% csrf_token %}
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">ब्यक्तिगत विवरण</h3>
+                <div class="multisteps-form__content">
+                  <div class="form-row mt-3">
+                    <div class="col-12 col-sm-6">
+                      {{pform.fullname}}
+                    </div>
+                    <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                     {{pform.address}}
+                    </div>
+                  </div>
+                  <div class="form-row mt-4">
+                    <div class="col-12 col-sm-6">
+                      {{pform.occ}}
+                    </div>
+                    <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                     {{pform.contact}}
+                    </div>
+                  </div>
+                  
+                  <div class="button-row d-flex mt-4">
+                    <input class="btn btn-primary ml-auto js-btn-next save-form" id="personal" type="submit" value="Next"/>
+                  </div>
+                </div>
+              </div>
+            </form>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">पारिवारिक विवरण </h3><span style="position: absolute; left: 85%; top: 5%;"><a href="#" id="addRow"><i class="fa fa-user-plus"></i></a></span>
+                <form id="form-container" action="familymembers" method="POST">
+                {% csrf_token %}
+                {{formset.management_form}}
+                {% for form in formset %}
+
+                <div class="form-row mt-4 members_form">
+
+                  {% if forloop.first %}
+                  {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                   {% endif %}
+                  <div class="col-12 col-sm-5">
+                    {{form.fullName}}
+                  </div>
+                  <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                    {{form.relation}}
+                  </div>
+                  <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                    {{form.Occupation}}
+                  </div>
+                </div>
+                {%endfor %}
+                <div id="newRow"></div>
+                <input type="submit" id="family_details" name="saveFamily" value="Save"/>
+                </form>
+              </div>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">भुमी सम्बन्धि विवरण</h3>
+                <div class="multisteps-form__content">
+                  <div class="row">
+                    <div class="col-12 col-md-6 mt-4">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title">Item Title</h5>
+                          <p class="card-text">Small and nice item description</p><a class="btn btn-primary" href="#" title="Item Link">Item Link</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 mt-4">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title">Item Title</h5>
+                          <p class="card-text">Small and nice item description</p><a class="btn btn-primary" href="#" title="Item Link">Item Link</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="button-row d-flex mt-4 col-12">
+                      <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Prev</button>
+                      <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next">Next</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">भौतिक संरचना</h3>
+                <div class="multisteps-form__content">
+                  <div class="form-row mt-4">
+                    <textarea class="multisteps-form__textarea form-control" placeholder="Additional Comments and Requirements"></textarea>
+                  </div>
+                  <div class="button-row d-flex mt-4">
+                    <button class="btn btn-primary js-btn-prev" type="button" title="Prev">Prev</button>
+                    <button class="btn btn-success ml-auto" type="button" title="Send">Send</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+<script src="{% static 'ipt/homescript.js' %} "></script>
+
+</body>
+
+<script>
+
+$(document).ready(function(e){
+
+
+  let membersform = document.querySelectorAll(".members_form")
+  let container = document.querySelector("#form-container")
+  let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+  let formNum = membersform.length-1 // Get the number of the last form on the page with zero-based indexing
+  $("#addRow").click(function () {
+
+        let newForm = membersform[0].cloneNode(true)
+        let formRegex = RegExp(`form-(\\d){1}-`,'g') 
+        formNum++ //Increment the form number
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form numb
+        $('#newRow').append(newForm);
+        totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
+    });
+
+
+/**
+
+**/
+$(document).on('click', '#removeRow', function () {
+        $(this).closest('#inputFormRow').remove();
+    });
+
+
+
+
+/**
+ * 
+ * Stepwise form submit
+ * */
+$("form").submit(function(e){
+ // e.preventDefault()
+});
+ $("#personal, #family_details").click(function(e){
+
+  tgt = e.target
+  f = $(this.form)
+  $.ajax({
+        url : f.attr('action'), // the endpoint
+        type : f.attr('method'), // http method
+        dataType: 'json',
+			  contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+        data : f.serialize(), // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            
+            console.log(json); // log the returned json to the console
+            response = json
+            if(response.status == 'error'){
+              actvStep = getActiveStep(tgt);
+              if( actvStep == -1){
+                actvStep = actvStep+2
+              } else{
+                actvStep = actvStep+1
+              }
+              setActiveStep(actvStep);
+
+  //open active panel
+              setActivePanel(actvStep);
+
+              console.log(actvStep)
+            }
+            
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+
+
+    });
+ });
+
+});
+</script>
+</html>

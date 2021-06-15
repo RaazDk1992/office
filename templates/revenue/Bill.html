@@ -1,0 +1,320 @@
+{% load static %}
+{% load mathfilters %}
+{% static "icons" as BASE_URL %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <script src="{% static 'scripts/jquery.js' %} "></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--========== BOX ICONS ==========-->
+
+        <!--========== CSS ==========-->
+        <link rel="stylesheet" href="{% static 'dms/css/styles.css' %}">
+
+        <title>Lekbeshi RMS </title>
+
+
+        <style>
+			@media print {
+				@page { size:8.5in 11in; margin: 2cm }
+
+				ul {
+				padding: 0;
+				margin: 0 0 1rem 0;
+				list-style: none;
+			}
+			body {
+				font-family: "Inter", sans-serif;
+				margin: 0;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			table,
+			table th,
+			table td {
+				border: 1px solid silver;
+			}
+			table th,
+			table td {
+				text-align: right;
+				padding: 8px;
+			}
+			h1,
+			h4,
+			p {
+				margin: 0;
+			}
+
+			.container {
+				padding: 20px 0;
+				width: 1000px;
+				max-width: 90%;
+				margin: 0 auto;
+			}
+
+			.inv-title {
+				padding: 10px;
+				border: 1px solid silver;
+				text-align: center;
+				margin-bottom: 30px;
+			}
+
+			.inv-logo {
+				width: 150px;
+				display: block;
+				margin: 0 auto;
+				margin-bottom: 40px;
+			}
+
+			/* header */
+			.inv-header {
+				display: flex;
+				margin-bottom: 20px;
+			}
+			.inv-header > :nth-child(1) {
+				flex: 2;
+			}
+			.inv-header > :nth-child(2) {
+				flex: 1;
+			}
+			.inv-header h2 {
+				font-size: 20px;
+				margin: 0 0 0.3rem 0;
+			}
+			.inv-header ul li {
+				font-size: 15px;
+				padding: 3px 0;
+			}
+
+			/* body */
+			.inv-body table th,
+			.inv-body table td {
+				text-align: left;
+			}
+			.inv-body {
+				margin-bottom: 30px;
+			}
+
+			/* footer */
+			.inv-footer {
+				display: flex;
+				flex-direction: row;
+			}
+			.inv-footer > :nth-child(1) {
+				flex: 2;
+			}
+			.inv-footer > :nth-child(2) {
+				flex: 1;
+			}
+			}
+			ul {
+				padding: 0;
+				margin: 0 0 1rem 0;
+				list-style: none;
+			}
+			body {
+				font-family: "Inter", sans-serif;
+				margin: 0;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			table,
+			table th,
+			table td {
+				border: 1px solid silver;
+			}
+			table th,
+			table td {
+				text-align: right;
+				padding: 8px;
+			}
+			h1,
+			h4,
+			p {
+				margin: 0;
+			}
+
+			.container {
+				padding: 20px 0;
+				width: 1000px;
+				max-width: 90%;
+				margin: 0 auto;
+			}
+
+			.inv-title {
+				padding: 10px;
+				border: 1px solid silver;
+				text-align: center;
+				margin-bottom: 30px;
+			}
+
+			.inv-logo {
+				width: 70px;
+				display: block;
+				margin: 0 auto;
+				margin-bottom: 40px;
+			}
+
+			/* header */
+			.inv-header {
+				display: flex;
+				margin-bottom: 20px;
+			}
+			.inv-header > :nth-child(1) {
+				flex: 2;
+			}
+			.inv-header > :nth-child(2) {
+				flex: 1;
+			}
+			.inv-header h2 {
+				font-size: 20px;
+				margin: 0 0 0.3rem 0;
+			}
+			.inv-header ul li {
+				font-size: 15px;
+				padding: 3px 0;
+			}
+
+			/* body */
+			.inv-body table th,
+			.inv-body table td {
+				text-align: left;
+			}
+			.inv-body {
+				margin-bottom: 30px;
+			}
+
+			/* footer */
+			.inv-footer {
+				display: flex;
+				flex-direction: row;
+			}
+			.inv-footer > :nth-child(1) {
+				flex: 2;
+			}
+			.inv-footer > :nth-child(2) {
+				flex: 1;
+			}
+        </style>
+    </head>
+    <body>
+        <!--========== HEADER ==========-->
+		{% if request.user.is_authenticated %}
+		<header class="header">
+            <div class="header__container">
+                <img src="assets/img/perfil.jpg" alt="" class="header__img">
+
+				<div id="user_info" style="position: absolute; left: 90%;">{{request.user.username}}
+					<a href="user/logout">logout</a>
+				</div>
+
+                <a href="revhome" class="header__logo navigation_link">Lekbeshi Municipality RMS </a>
+               
+				
+    
+                <div class="header__toggle">
+                    <i class='bx bx-menu' id="header-toggle"></i>
+                </div>
+            </div>
+        </header>
+
+		
+		
+
+        <!--========== NAV ==========-->
+        
+        <!--========== CONTENTS ==========-->
+        <main>
+            
+            <div class="container" id="invoice" style="margin-top: 50px;">
+				{% for d in details %}
+				
+				<div class="inv-header">
+					
+					<div style="position: absolute; left: 40%;">
+						<span><img src="{{BASE_URL}}/new_logo.png"/></span><span><b>{{d.office}}</b></span>
+						<div id="office_details" style=" position:absolute;left: 45%;">{{d.officeAddress}}</div>
+						
+					</div>
+				</div>
+				<div class="inv-body" style="margin-top: 100px;">
+					<table>
+						<thead>
+							<th>सेवा</th>
+							<th>संख्या</th>
+							<th>शुल्क</th>
+						</thead>
+						<tbody>
+							
+							<tr>
+								<td>
+									{{d.service}}
+								</td>
+								<td>{{details.count}}</td>
+								<td>{{d.amount}}</td>
+							</tr>
+							
+							
+						</tbody>
+					</table>
+				</div>
+				<div class="inv-footer">
+					<div><!-- required --></div>
+					<div>
+						<table>
+							<tr>
+								<th>जम्मा</th>
+								<td>{{d.totalAmountNp}}</td>
+							</tr>
+							<tr>
+								<th>अक्षेरेपी</th>
+								<td>{{d.totalAmountInLetters}}</td>
+							</tr>
+							<tr>
+								<th>मिति</th>
+								<td>{{d.transactionDateNp}}</td>
+							</tr>
+							
+						</table>
+					</div>
+				</div>
+			</div>
+
+			{% if ref == 'online'%}
+		
+			<form>
+				<input type="hidden" name="billref" id = "billref" value="{{d.bill}}"/>
+				<input type="submit" class="btn btn-primary" name="commit" value="Commit" style="position: absolute; left: 45%;"/>
+			</form>
+			{% else %}
+			<button id="print">print</button>
+			{%endif %}
+
+			{% endfor %}
+        </main>
+
+		{% endif %}
+        <!--========== MAIN JS ==========-->
+        <script src="{% static 'print/js/printThis.js' %}"></script>
+        
+        <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'print/skeleton/normalize.css' %}">
+    </body>
+
+    <script>
+
+		$('#print').on('click',function(){
+			$("#invoice").printThis({
+				importStyle: true
+			});
+		})
+				
+		
+ </script>
+</html>
