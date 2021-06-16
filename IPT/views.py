@@ -1,8 +1,8 @@
-from IPT.models import FamilyMembers
+from IPT.models import FamilyMembers, PersonalInfo
 from django.shortcuts import render
 from django.db.models import Sum
 from django.db.models import Q,F
-
+from django.core.serializers import serialize
 
 
 from django.urls import reverse
@@ -126,7 +126,8 @@ def personalInfo(request):
                 if f.id !=None:
                     response = {
                         'status': 'success',
-                         'message': 'data saved!!'
+                         'message': 'data saved!!',
+                         'person': f.pk
                         }
                     data = simplejson.dumps(response)
                 else:

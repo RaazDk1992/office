@@ -91,7 +91,7 @@
                 {% csrf_token %}
                 {{formset.management_form}}
                 {% for form in formset %}
-
+                  {{form.familyHead}}
                 <div class="form-row mt-4 members_form">
 
                   {% if forloop.first %}
@@ -204,7 +204,7 @@ $(document).on('click', '#removeRow', function () {
  * Stepwise form submit
  * */
 $("form").submit(function(e){
- // e.preventDefault()
+  e.preventDefault()
 });
  $("#personal, #family_details").click(function(e){
 
@@ -220,21 +220,27 @@ $("form").submit(function(e){
         // handle a successful response
         success : function(json) {
             
-            console.log(json); // log the returned json to the console
+            // log the returned json to the console
             response = json
-            if(response.status == 'error'){
+           
+            if(response.status == 'success'){
               actvStep = getActiveStep(tgt);
               if( actvStep == -1){
                 actvStep = actvStep+2
               } else{
                 actvStep = actvStep+1
               }
+             if(f.attr('action') == 'personalinfo'){
+
+              console.log('xx')
+
+             }
               setActiveStep(actvStep);
 
   //open active panel
               setActivePanel(actvStep);
 
-              console.log(actvStep)
+             
             }
             
         },
