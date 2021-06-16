@@ -111,7 +111,7 @@ def infraStructureTaxes(request):
         ift = LandUsageForm(request.POST)
         if ift.is_valid:
             ift.save()
-    return render(request,'infrastructuretaxes.html',{'iftf':iftf})
+    return render(request,'ipt/infrastructuretaxes.html',{'iftf':iftf})
 
 
 def personalInfo(request):

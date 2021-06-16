@@ -1,5 +1,4 @@
 {% load static %}
-{% load mathfilters %}
 {% static "icons" as BASE_URL %}
 <!DOCTYPE html>
     <html lang="en">
@@ -13,7 +12,7 @@
         <!--========== BOX ICONS ==========-->
 
         <!--========== CSS ==========-->
-        <link rel="stylesheet" href="{% static 'dms/css/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'mainmenu/css/styles.css' %}">
 
         <title>Lekbeshi RMS </title>
 
@@ -164,11 +163,9 @@
 
 		{% endif %}
         <!--========== MAIN JS ==========-->
-        <script src="{% static 'dms/js/main.js' %}"></script>
-		<script src="{% static 'datepicker/nepaliDatePicker.min.js' %}"></script>
-		<link rel="stylesheet" href="{% static 'datepicker/nepaliDatePicker.min.css' %}">
+        <script src="{% static 'mainmenu/js/main.js' %}"></script>
+	
         <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'slider/theme.css' %}">
         <link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
     </body>
 
@@ -201,11 +198,7 @@
 				});
 
 
-				$("#reg_ref_np").val(calendarFunctions.getNepaliNumber(parseInt($("#reg_ref").val())));
-
-				$("#reg_ref").focusout(function(e){
-					$("#reg_ref_np").val(calendarFunctions.getNepaliNumber(parseInt($("#reg_ref").val())));
-				});
+				
 			
 
             });
@@ -215,31 +208,7 @@
 		*
 		**/	
 
-		var currentDate = new Date();
-var currentNepaliDate = calendarFunctions.getBsDateByAdDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
-var formatedNepaliDate = calendarFunctions.bsDateFormat("%y-%m-%d", currentNepaliDate.bsYear, currentNepaliDate.bsMonth, currentNepaliDate.bsDate);
-$("#from-picker").nepaliDatePicker({
-    dateFormat: "%y-%m-%d",
-    closeOnDateSelect: true,
-    minDate: "२०७०-१-२०",
-    maxDate: formatedNepaliDate
-});
-
-$("#darta_date_picker, #dispatch_date_picker").val(formatedNepaliDate);
-$("#darta_date_picker, #dispatch_date_picker").nepaliDatePicker({
-    dateFormat: "%y-%m-%d",
-    closeOnDateSelect: true,
-    minDate: "२०७०-१-२०",
-    maxDate: formatedNepaliDate
-});
-
-$(".action").click(function(e){
-	ref = $(this).data('ref')
-	if($(this).hasClass('disable')){
-		 $('#f'+ref).submit()
-
-	}
-});
+		
  
  </script>
 </html>
