@@ -19,7 +19,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth 
 from django.contrib.auth import authenticate,login
 from django.db.models import Count
-from .forms import BuildingTypesForm, BuildingUsageForm, BuildingsDetailsFormset, DepricationForm, FamilyDetailsFormset, LandDetailsFormset, LandTaxesForm, LandUsageForm, OccupationsForm, PersonalInfoForm, RelationsForm, SectorsForm,LandUnitsForm,RF
+from .forms import BuildingTypesForm, BuildingUsageForm, BuildingsDetailsFormset, DepricationForm, FamilyDetailsFormset, InfrastructureTaxForm, LandDetailsFormset, LandTaxesForm, LandUsageForm, OccupationsForm, PersonalInfoForm, RelationsForm, SectorsForm,LandUnitsForm,RF
 # Create your views here.
 
 def iptHome(request):
@@ -108,9 +108,9 @@ def landTaxes(request):
             Lform.save()
     return render(request,'ipt/landtaxes.html',{'ltf':ltf})
 def infraStructureTaxes(request):
-    iftf = LandTaxesForm()
+    iftf = InfrastructureTaxForm()
     if request.POST:
-        ift = LandUsageForm(request.POST)
+        ift = InfrastructureTaxForm(request.POST)
         if ift.is_valid:
             ift.save()
     return render(request,'ipt/infrastructuretaxes.html',{'iftf':iftf})
