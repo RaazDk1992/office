@@ -178,7 +178,34 @@ def familyDetails(request):
     
 
 def landDetails(request):
-    pass
+    if request.POST:
+       formset = LandDetailsFormset(data=request.POST)
+       if formset.is_valid:
+            try:
+                f = formset.save()
+                print(list(f))
+                if f:
+                    response = {
+                        'status': 'success',
+                         'message': 'data saved!!',
+                        }
+                    data = simplejson.dumps(response)
+                else:
+                    response = {
+                        'status': 'fail',
+                         'message': 'data could not be saved!!',
+                        }
+                    data = simplejson.dumps(response)
+            except Exception as e :
+                response = {
+                        'status': 'error',
+                         'message': str(e),
+                        }
+                data = simplejson.dumps(response)
+
+    return HttpResponse(data, content_type='application/json')
+    
+
 
 def handler_not_found(request,exception):
     return render(request,'404.html',)

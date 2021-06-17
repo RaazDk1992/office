@@ -81,11 +81,14 @@ class LandUnitsForm(forms.ModelForm):
         fields = [
             'unit',
             'area_per_unit',
+            'area_per_unit_ft',
             'is_active'
         ]
         labels  = {
         'unit':'ईकाई',  
-        'area_per_unit':'प्रति ईकाई क्षेत्रफल',
+        'area_per_unit':'प्रति ईकाई क्षेत्रफल वर्ग मि',
+         'area_per_unit_ft':'प्रति ईकाई क्षेत्रफल वर्गफिट',
+
         'is_active': 'सक्रिय'
         }
         widgets = {
@@ -94,6 +97,10 @@ class LandUnitsForm(forms.ModelForm):
                 'placeholder':'ईकाई: जस्तै विगाहा/कठ्ठा  '
             }),
              'area_per_unit': forms.TextInput(attrs={
+                'class':'form-control col-sm-6',
+                'placeholder':'प्रति ईकाई क्षेत्रफल  '
+            }),
+            'area_per_unit_ft': forms.TextInput(attrs={
                 'class':'form-control col-sm-6',
                 'placeholder':'प्रति ईकाई क्षेत्रफल  '
             })

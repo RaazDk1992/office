@@ -33,6 +33,7 @@ class Relation(models.Model):
 class LandUnits(models.Model):
     unit = models.CharField(max_length=20)
     area_per_unit = models.CharField(max_length=50)
+    area_per_unit_ft = models.CharField(max_length=80)
     is_active = models.BooleanField(default=True)
     def __str__(self):
         return self.unit
@@ -113,6 +114,8 @@ class Buildings(models.Model):
     owner = models.ForeignKey(PersonalInfo,on_delete=models.RESTRICT)
     landRef = models.ForeignKey(LandDetails, on_delete=models.RESTRICT)
     made_year = models.DateField()
+    length = models.FloatField()
+    width = models.FloatField()
     occupiedArea = models.FloatField()
     buildingType = models.ForeignKey(BuildingType,on_delete=models.RESTRICT)
     buildingUsage = models.ForeignKey(BuildingUsage,on_delete=models.RESTRICT)
