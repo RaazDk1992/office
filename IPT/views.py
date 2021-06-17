@@ -155,7 +155,7 @@ def familyDetails(request):
        if formset.is_valid:
             try:
                 f = formset.save()
-                if f.id !=None:
+                if f:
                     response = {
                         'status': 'success',
                          'message': 'data saved!!',
