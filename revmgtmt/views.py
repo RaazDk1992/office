@@ -202,7 +202,7 @@ def register(request):
     user.profile.is_active = False
     user.save()
 
-    return render(request,'dms\\document.html')
+    return render(request,'revenue\\document.html')
 
 def logout(request):
     auth.logout(request)
