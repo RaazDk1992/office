@@ -283,9 +283,8 @@ class FamilyMemberForm(forms.ModelForm):
             'Occupation'
         ]
         widgets = {
-            'familyHead': forms.TextInput(attrs={
-                'class':'form-control col-sm-2',
-                'id': 'currentPerson'
+            'familyHead': forms.HiddenInput(attrs={
+                'class':'form-control col-sm-2 currentPerson',
             }),
             'fullName': forms.TextInput(attrs={
                 'class':'form-control',
@@ -322,7 +321,7 @@ class LandDetailsForm(forms.ModelForm):
             'is_active'
         ]
         widgets = {
-            'owner': forms.TextInput(attrs={
+            'owner': forms.HiddenInput(attrs={
                 'class':'form-control currentPerson'
             }),
             'kitta': forms.TextInput(attrs={
@@ -382,7 +381,7 @@ class BuildingsForm(forms.ModelForm):
             'is_active'
         ]
         widgets = {
-            'owner': forms.TextInput(attrs={
+            'owner': forms.HiddenInput(attrs={
                 'class':'form-control col-sm-2 currentPerson'
             }),
             'landRef': forms.Select(attrs={

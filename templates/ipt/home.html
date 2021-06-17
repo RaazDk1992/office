@@ -131,12 +131,11 @@
                     {% for form in ldf%}
 
                     <div class="lands_form">
+                      <div class="col-12 col-sm-1">
+                         
+                        {{form.owner}}
+                      </div>
                       <div class="row">
-
-                        <div class="col-12 col-sm-2">
-                          {{form.owner.label}}
-                          {{form.owner}}
-                        </div>
   
                         <div class="col-12 col-sm-2">
                           {{form.kitta.label}}
@@ -204,12 +203,11 @@
                     {% for form in bdf%}
 
                     <div class="buildings_form">
+                      <div class="col-12 col-sm-1">
+                         
+                        {{form.owner}}
+                      </div>
                       <div class="row">
-
-                        <div class="col-12 col-sm-2">
-                          {{form.owner.label}}
-                          {{form.owner}}
-                        </div>
   
                         <div class="col-12 col-sm-2">
                           {{form.landRef.label}}
@@ -329,6 +327,8 @@ function add(formToChange,loc){
         formNum++ //Increment the form number
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form numb
         loc.append(newForm);
+        let tmp = $('.currentPerson:first').val()
+        $('.currentPerson').val(tmp)
         totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
 
 }
@@ -384,7 +384,7 @@ $("form").submit(function(e){
 
   
               setActivePanel(actvStep);
-              console.log(tgt)
+             
 
              
             }
