@@ -103,7 +103,7 @@ class LandDetails(models.Model):
     unit = models.ForeignKey(LandUnits, on_delete=models.RESTRICT)
     usage = models.ForeignKey(LandUsage,on_delete=models.RESTRICT)
     area = models.FloatField()
-    accessibleToRoad =models.BooleanField(default=False)
+    accessibleToRoad =models.ForeignKey(RoadAccessibilityState,on_delete=models.RESTRICT)
     pricePerUnit = models.IntegerField()
     property_value = models.IntegerField()
     is_active = models.BooleanField(default=True)
@@ -116,6 +116,8 @@ class Buildings(models.Model):
     occupiedArea = models.FloatField()
     buildingType = models.ForeignKey(BuildingType,on_delete=models.RESTRICT)
     buildingUsage = models.ForeignKey(BuildingUsage,on_delete=models.RESTRICT)
+    accessibleToRoad =models.ForeignKey(RoadAccessibilityState,on_delete=models.RESTRICT)
+
     stories = models.IntegerField()
     price = models.IntegerField()
     is_active = models.BooleanField(default=True)

@@ -1,4 +1,4 @@
-from IPT.models import FamilyMembers, PersonalInfo
+from IPT.models import Buildings, FamilyMembers, LandDetails, PersonalInfo
 from django.shortcuts import render
 from django.db.models import Sum
 from django.db.models import Q,F
@@ -19,14 +19,16 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth 
 from django.contrib.auth import authenticate,login
 from django.db.models import Count
-from .forms import BuildingTypesForm, BuildingUsageForm, DepricationForm, FamilyDetailsFormset, LandTaxesForm, LandUsageForm, OccupationsForm, PersonalInfoForm, RelationsForm, SectorsForm,LandUnitsForm,RF
+from .forms import BuildingTypesForm, BuildingUsageForm, BuildingsDetailsFormset, DepricationForm, FamilyDetailsFormset, LandDetailsFormset, LandTaxesForm, LandUsageForm, OccupationsForm, PersonalInfoForm, RelationsForm, SectorsForm,LandUnitsForm,RF
 # Create your views here.
 
 def iptHome(request):
     personalf = PersonalInfoForm()
     formset = FamilyDetailsFormset(queryset=FamilyMembers.objects.none())
+    landformset = LandDetailsFormset(queryset=LandDetails.objects.none())
+    buildingsformset = BuildingsDetailsFormset(queryset=Buildings.objects.none())
 
-    return render(request,'ipt/home.html',{'pform':personalf,'formset':formset})
+    return render(request,'ipt/home.html',{'pform':personalf,'formset':formset, 'ldf':landformset, 'bdf':buildingsformset})
 def sectors(request):
       form = SectorsForm()
       if request.POST:
@@ -175,7 +177,8 @@ def familyDetails(request):
     return HttpResponse(data, content_type='application/json')
     
 
-    
+def landDetails(request):
+    pass
 
 def handler_not_found(request,exception):
     return render(request,'404.html',)

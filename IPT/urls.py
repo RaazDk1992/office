@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.iptHome, name="revhome"),
     path('sectors', views.sectors, name="sectors"),
     path('landunits', views.landUnits, name="landunits"),
+    path('landdetails', views.landDetails, name="landunits"),
     path('roadaccess', views.roadAccess, name="roadaccess"),
     path('buildingtypes', views.buildingTypes, name="buildingtypes"),
     path('buildingusage', views.buildingUsage, name="buildingusage"),

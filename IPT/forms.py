@@ -3,7 +3,7 @@ from django import forms
 from django.forms import modelformset_factory
 from django.contrib.auth.models import User
 
-from .models import Deprication, FamilyMembers, FineReward, LandTaxes,InfrastructureTaxes, Occupation, PersonalInfo, Relation,RoadAccessibilityState,Sectors,LandUnits,LandUsage,BuildingType,BuildingUsage
+from .models import Buildings, Deprication, FamilyMembers, FineReward, LandDetails, LandTaxes,InfrastructureTaxes, Occupation, PersonalInfo, Relation,RoadAccessibilityState,Sectors,LandUnits,LandUsage,BuildingType,BuildingUsage
 class OccupationsForm(forms.ModelForm):
     class Meta:
         model = Occupation
@@ -306,3 +306,115 @@ FamilyDetailsFormset = modelformset_factory(
     FamilyMembers, form=FamilyMemberForm, extra=1
 )
 
+
+class LandDetailsForm(forms.ModelForm):
+    class Meta:
+        model = LandDetails
+        fields = [
+            'owner',
+            'kitta',
+            'unit',
+            'usage',
+            'area',
+            'accessibleToRoad',
+            'pricePerUnit',
+            'property_value',
+            'is_active'
+        ]
+        widgets = {
+            'owner': forms.TextInput(attrs={
+                'class':'form-control currentPerson'
+            }),
+            'kitta': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'कित्ता नं'
+            }),
+            'unit': forms.Select(attrs={
+                'class':'form-control',
+            }),
+             'usage': forms.Select(attrs={
+                'class':'form-control',
+            }),
+            'area': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'क्षेत्रफल '
+            }),
+            'accessibleToRoad': forms.Select(attrs={
+                'class':'form-control',
+            }),
+             'pricePerUnit': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'प्रति विगाहा/कठ्ठा वा रोपनी मुल्य'
+            }),
+             'property_value': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'मुल्य स्वघोषणा'
+            }),
+
+        }
+        labels  = {
+            'owner' : 'owner',
+            'kitta' : 'कित्ता नं',
+            'unit' : ' ईकाई',
+            'usage' : 'प्रायोजन',
+            'area' : 'क्षेत्रफल',
+            'accessibleToRoad' :'सडक अवस्थिति',
+            'pricePerUnit': 'प्रति ईकाई मुल्य',
+            'property_value': 'जम्मा मुल्य',
+            'is_active':'सक्रिय'
+        }
+LandDetailsFormset = modelformset_factory(
+    LandDetails, form=LandDetailsForm, extra=1
+)
+
+class BuildingsForm(forms.ModelForm):
+    class Meta:
+        model = Buildings
+        fields = [
+            'owner',
+            'landRef',
+            'made_year',
+            'occupiedArea',
+            'buildingType',
+            'buildingUsage',
+            'stories',
+            'price',
+            'is_active'
+        ]
+        widgets = {
+            'owner': forms.TextInput(attrs={
+                'class':'form-control col-sm-2 currentPerson'
+            }),
+            'landRef': forms.Select(attrs={
+                'class':'form-control',
+            }),
+            'made_year': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'बनेको मिति'
+            }),
+             'occupiedArea': forms.TextInput(attrs={
+                'class':'form-control',
+               
+            }),
+            'buildingType': forms.Select(attrs={
+                'class':'form-control',
+                
+            }),
+             'buildingUsage': forms.Select(attrs={
+                'class':'form-control',
+            }),
+             'stories': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'तल्ला'
+            }),
+            'price': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'मुल्य स्वघोषणा'
+            })
+
+        }
+
+
+BuildingsDetailsFormset = modelformset_factory(
+    Buildings, form=BuildingsForm, extra=1
+)
