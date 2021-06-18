@@ -326,6 +326,7 @@ function add(formToChange,loc, totalForms){
         let formRegex = RegExp(`form-(\\d){1}-`,'g') 
         formNum++ //Increment the form number
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form numb
+        loc.append("<div></div>");
         loc.append(newForm);
         let tmp = $('.currentPerson:first').val()
         $('.currentPerson').val(tmp)
