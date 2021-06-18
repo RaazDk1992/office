@@ -103,6 +103,7 @@ class LandDetails(models.Model):
     kitta = models.CharField(max_length=20)
     unit = models.ForeignKey(LandUnits, on_delete=models.RESTRICT)
     usage = models.ForeignKey(LandUsage,on_delete=models.RESTRICT)
+    area_ch = models.CharField(max_length=20)
     area = models.FloatField()
     accessibleToRoad =models.ForeignKey(RoadAccessibilityState,on_delete=models.RESTRICT)
     pricePerUnit = models.IntegerField()

@@ -129,7 +129,8 @@ def personalInfo(request):
                     response = {
                         'status': 'success',
                          'message': 'data saved!!',
-                         'person': f.pk
+                         'person': f.pk,
+                         'name':f.fullname
                         }
                     data = simplejson.dumps(response)
                 else:

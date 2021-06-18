@@ -380,6 +380,8 @@ class BuildingsForm(forms.ModelForm):
             'owner',
             'landRef',
             'made_year',
+            'length',
+            'width',
             'occupiedArea',
             'buildingType',
             'buildingUsage',
@@ -398,8 +400,22 @@ class BuildingsForm(forms.ModelForm):
                 'class':'form-control',
                 'placeholder':'बनेको मिति'
             }),
+             'length': forms.TextInput(attrs={
+                'class':'form-control',
+                'id':'building_length',
+                'placeholder': 'लम्बाई फुटमा'
+               
+            }),
+             'width': forms.TextInput(attrs={
+                'class':'form-control',
+                'id':'building_width',
+                'placeholder':'चौडाई फुटमा'
+
+               
+            }),
              'occupiedArea': forms.TextInput(attrs={
                 'class':'form-control',
+                'id':'building_area'
                
             }),
             'buildingType': forms.Select(attrs={

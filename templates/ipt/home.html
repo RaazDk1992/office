@@ -86,7 +86,7 @@
             </form>
               <!--single form panel-->
               <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                <h3 class="multisteps-form__title">पारिवारिक विवरण </h3><span style="position: absolute; left: 85%; top: 5%;"><a href="#" class="addRow" data-form="members_form"><i class="fa fa-user-plus"></i></a></span>
+                <h3 class="multisteps-form__title">पारिवारिक विवरण </h3> - <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;"><a href="#" class="addRow" data-form="members_form"><i class="fa fa-user-plus"></i></a></span>
                 <form id="form-container" action="familymembers" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS_F">
@@ -119,9 +119,9 @@
               </div>
               <!--single form panel-->
               <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                <h3 class="multisteps-form__title">भुमी सम्बन्धि विवरण</h3><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="lands_form">+</a></span>
+                <h3 class="multisteps-form__title">भुमी सम्बन्धि विवरण</h3> <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="lands_form">+</a></span>
                 <div class="multisteps-form__content">
-                  <form id="form-container" class="form form-horizontal" action="familymembers" method="POST">
+                  <form id="form-container" class="form form-horizontal" action="landdetails" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS_L">
                     <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS_L">
@@ -181,7 +181,7 @@
                       
                     </div>
                     <div class="row">
-                      
+                      <input type="submit" name="save_lands" value="Save" id="land_details_save"/>
                     </div>
 
                     {% endfor %}
@@ -190,7 +190,7 @@
               </div>
               <!--single form panel-->
               <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                <h3 class="multisteps-form__title">भौतिक संरचना</h3><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="buildings_form">+</a></span>
+                <h3 class="multisteps-form__title">भौतिक संरचना</h3> <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="buildings_form">+</a></span>
                 <div class="multisteps-form__content">
                   
                   <form id="form-container" class="form form-horizontal" action="familymembers" method="POST">
@@ -350,7 +350,7 @@ $(document).on('click', '#removeRow', function () {
 $("form").submit(function(e){
   e.preventDefault()
 });
- $("#personal, #family_details").click(function(e){
+ $("#personal, #family_details, #land_details_save").click(function(e){
 
   tgt = e.target
   f = $(this.form)
@@ -367,10 +367,11 @@ $("form").submit(function(e){
             // log the returned json to the console
             response = json
 
-            console.log(response)
+           console.log(response)
            
             if(response.status == 'success'){
               actvStep = getActiveStep(tgt);
+
               if( actvStep == -1){
                 actvStep = actvStep+2
               } else{
@@ -379,12 +380,23 @@ $("form").submit(function(e){
              if(f.attr('action') == 'personalinfo'){
 
                 $(".currentPerson").val(response.person)
-             }
-              setActiveStep(actvStep);
+                $("#current_p").text(response.name)
+                setActiveStep(1);
+                setActivePanel(1);
 
+             } else if(f.attr('action') == 'familymembers'){
+
+              setActiveStep(2);
+              setActivePanel(2);
+
+             } else if(f.attr('action') == 'landdetails'){
+
+              setActiveStep(3);
+              setActivePanel(3);
+
+             }
+              
   
-              setActivePanel(actvStep);
-             
 
              
             }

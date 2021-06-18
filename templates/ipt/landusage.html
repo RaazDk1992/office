@@ -102,13 +102,13 @@
 
 
 				<div class="container">
-					<form class="form form-horizontal" action="landunits" method="POST">
+					<form class="form form-horizontal" action="landusage" method="POST">
 						{% csrf_token %}
 
 
 						{% block content%}
 
-						{% for field in unitform %}
+						{% for field in luf %}
 
 						<div class="form-group">
 							
