@@ -277,7 +277,7 @@
 
 <script>
 
-totalForms =1
+
   
 
 $(document).ready(function(e){
@@ -294,21 +294,21 @@ $(document).ready(function(e){
         totalForms = document.querySelector("#id_form-TOTAL_FORMS_F")
 
         loc = $("#newRow")
-        add(f,loc)
+        add(f,loc,totalForms)
       } else if (ref == 'lands_form'){
 
         f = document.querySelectorAll(".lands_form")
         let totalForms = document.querySelector("#id_form-TOTAL_FORMS_L")
 
         loc = $("#new_land_row")
-        add(f,loc)
+        add(f,loc,totalForms)
       } else if(ref == 'buildings_form'){
 
         f = document.querySelectorAll(".buildings_form")
         let totalForms = document.querySelector("#id_form-TOTAL_FORMS_B")
 
         loc = $("#new_building_row")
-        add(f,loc)
+        add(f,loc,totalForms)
 
       }
 
@@ -317,7 +317,7 @@ $(document).ready(function(e){
     });
 
   
-function add(formToChange,loc){
+function add(formToChange,loc, totalForms){
 
   fo = formToChange
   let container = document.querySelector("#form-container")

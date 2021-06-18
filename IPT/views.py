@@ -1,3 +1,5 @@
+from django.core import serializers
+from django.forms import fields
 from IPT.models import Buildings, FamilyMembers, LandDetails, PersonalInfo
 from django.shortcuts import render
 from django.db.models import Sum
@@ -184,11 +186,12 @@ def landDetails(request):
        if formset.is_valid:
             try:
                 f = formset.save()
-                print(list(f))
                 if f:
+                    _owner = PersonalInfo.objects.last()
                     response = {
                         'status': 'success',
                          'message': 'data saved!!',
+                         'data':serializers.serialize('json',LandDetails.objects.filter(owner = _owner ))
                         }
                     data = simplejson.dumps(response)
                 else:
