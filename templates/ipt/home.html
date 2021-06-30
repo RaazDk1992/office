@@ -114,7 +114,9 @@
                 </div>
                 {%endfor %}
                 <div id="newRow"></div>
-                <input type="submit" id="family_details" name="saveFamily" value="Save"/>
+                <div class="button-row d-flex mt-4">
+                  <input class="btn btn-primary ml-auto js-btn-next save-form" id="family_details" type="submit" value="Next"/>
+                </div>
                 </form>
               </div>
               <!--single form panel-->
@@ -149,6 +151,10 @@
                           {{form.usage.label}}
                           {{form.usage}}
                         </div>
+                        <div class="col-12 col-sm-3">
+                          {{form.accessibleToRoad.label}}
+                          {{form.accessibleToRoad}}
+                        </div>
                      
                       </div>
                       <br>
@@ -159,10 +165,7 @@
                           {{form.area}}
                         </div>
   
-                        <div class="col-12 col-sm-2">
-                          {{form.accessibleToRoad.label}}
-                          {{form.accessibleToRoad}}
-                        </div>
+                       
                         <div class="col-6 col-sm-3 mt-4 mt-sm-0">
                           {{form.pricePerUnit.label}}
                           {{form.pricePerUnit}}
@@ -180,9 +183,13 @@
                     <div class="row" id="new_land_row">
                       
                     </div>
-                    <div class="row">
-                      <input type="submit" name="save_lands" value="Save" id="land_details_save"/>
-                    </div>
+                  
+                   
+                      <div class="button-row d-flex mt-4">
+                        <input class="btn btn-primary ml-auto js-btn-next save-form" id="land_details_save" type="submit" value="Next"/>
+                      </div>
+                      
+                  
 
                     {% endfor %}
                 </form>
@@ -252,9 +259,13 @@
                     <div class="row" id="new_building_row">
                       
                     </div>
-                    <div class="row">
+                  
+
+                      <div class="button-row d-flex mt-4">
+                        <input class="btn btn-primary ml-auto js-btn-next save-form" id="building_details_save" type="submit" value="Next"/>
+                      </div>
                       
-                    </div>
+                   
 
                     {% endfor %}
                 </form>
