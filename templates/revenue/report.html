@@ -97,9 +97,18 @@
 		
 
         <!--========== NAV ==========-->
-        {% block menu %}
-            {% include "revenue/menu.html" %}
+        {% if request.user.is_superuser %}
+
+        {% block adminmenu %}
+        {% include "revenue/adminmenu.html" %}
         {% endblock %}
+
+        {% else %}
+
+        {% block menu %}
+        {% include "revenue/menu.html" %}
+        {% endblock %}
+        {% endif %}
 
         <!--========== CONTENTS ==========-->
         <main>

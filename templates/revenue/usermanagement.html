@@ -95,9 +95,18 @@
 		
 
         <!--========== NAV ==========-->
+        {% if request.user.is_superuser %}
+
+        {% block adminmenu %}
+        {% include "revenue/adminmenu.html" %}
+        {% endblock %}
+
+        {% else %}
+
         {% block menu %}
         {% include "revenue/menu.html" %}
-    {% endblock %}
+        {% endblock %}
+        {% endif %}
         <!--========== CONTENTS ==========-->
         <main>
             <div id="main_content" class="view" style="left:8%;">
@@ -210,9 +219,7 @@
 
 		{% endif %}
         <!--========== MAIN JS ==========-->
-        <script src="{% static 'mainmenu/js/main.js' %}"></script>
-		<script src="{% static 'datepicker/nepaliDatePicker.min.js' %}"></script>
-		<link rel="stylesheet" href="{% static 'datepicker/nepaliDatePicker.min.css' %}">
+        <script src="{% static 'mainmenu/js/mainmenuscript.js' %}"></script>
         <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
     </body>
