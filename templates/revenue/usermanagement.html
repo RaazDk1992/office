@@ -95,18 +95,9 @@
 		
 
         <!--========== NAV ==========-->
-        {% if request.user.is_superuser %}
-
-        {% block adminmenu %}
-        {% include "revenue/adminmenu.html" %}
-        {% endblock %}
-
-        {% else %}
-
         {% block menu %}
         {% include "revenue/menu.html" %}
-        {% endblock %}
-        {% endif %}
+    {% endblock %}
         <!--========== CONTENTS ==========-->
         <main>
             <div id="main_content" class="view" style="left:8%;">
@@ -219,7 +210,7 @@
 
 		{% endif %}
         <!--========== MAIN JS ==========-->
-        <script src="{% static 'mainmenu/js/mainmenuscript.js' %}"></script>
+        <script src="{% static 'mainmenu/js/mainmenu.js' %}"></script>
         <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
     </body>

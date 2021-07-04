@@ -22,25 +22,28 @@ from .models import ServiceMeta,Service,Office,RasidAllocation, SetupGuide,relma
 
 def revhome(request):
      if request.user.is_authenticated:
-         try:
-             services = Service.objects.all()
-             fy = FY.objects.filter(isactive=True)
-             office =   get_object_or_404(Office, relmap__uRef = request.user.id)#Office.objects.get(relmap__uRef = request.user.id)
-             rasid = RasidAllocation.objects.get(officeRef = office.id)
-             payments = PaymentMethod.objects.all()
-             d = {}
-             if request.POST: 
-                return redirect('revhome')
-             else:
+        if request.user.is_superuser:
+                return render(request,'revenue\\admindashbaord.html')
+        else:
+             try:
+                services = Service.objects.all()
+                fy = FY.objects.filter(isactive=True)
+                office =   get_object_or_404(Office, relmap__uRef = request.user.id)#Office.objects.get(relmap__uRef = request.user.id)
+                rasid = RasidAllocation.objects.get(officeRef = office.id)
+                payments = PaymentMethod.objects.all()
+                d = {}
+                if request.POST: 
+                    return redirect('revhome')
+                else:
                  gt = Bill.objects.values('org_ref').annotate(total = Sum('totalAmount'))
                  summary = Bill.objects.filter(org_ref= office.id).filter(fyRef__id=fy[0].id).filter(isActive=True).values('id','billNoNp','transactionDateNp','clientName','address','contact','serviceRef__serviceName','totalAmountNp','user__first_name')
                  d['gt'] = gt
                  d['details'] = summary 
-                 return render(request,'revenue\\document.html',{'office':office.id,'fy':fy,'services':services,'office':office,'rasid':rasid,'payments':payments,'d':d})
-         except Exception as e:
-             messages.error(request, 'Make your you are assigned an Office, ')
-             messages.error(request, 'Or,Your account setting has not been completed yet. ')
-             raise Http404(e)
+                return render(request,'revenue\\document.html',{'office':office.id,'fy':fy,'services':services,'office':office,'rasid':rasid,'payments':payments,'d':d})
+             except Exception as e:
+                messages.error(request, 'Make your you are assigned an Office, ')
+                messages.error(request, 'Or,Your account setting has not been completed yet. ')
+                raise Http404(e)
      else :
           return redirect('validate')
 
