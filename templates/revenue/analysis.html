@@ -97,11 +97,19 @@
 		
 
         <!--========== NAV ==========-->
+        {% if request.user.is_superuser %}
+
+        {% block adminmenu %}
+        {% include "revenue/adminmenu.html" %}
+        {% endblock %}
+
+        {% else %}
+
         {% block menu %}
         {% include "revenue/menu.html" %}
-    {% endblock %}
-
-        <!--========== CONTENTS ==========-->
+        {% endblock %}
+        {% endif %}
+        <!--========== CONTENTS ======= ===-->
         <main>
             <div id="main_content" class="view" style="left:8%;">
 
