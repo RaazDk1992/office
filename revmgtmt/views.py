@@ -418,35 +418,41 @@ def addBill(request):
      if request.user.is_authenticated:
         
          if request.POST:
-             bill = Bill()
-             bill.fyRef = FY.objects.get(pk = request.POST['fy_ref'])
-             bill.billNo = request.POST['current_rasid_en']
-             bill.billNoNp  = request.POST['current_rasid_np']
-             bill.transactionDateNp = request.POST['trans_date_np']
-             bill.clientName  =request.POST['customer_name']
-             bill.address = request.POST['customer_address']
-             bill.contact = request.POST['customer_contact']
-             bill.totalAmount = request.POST['amount']
-             bill.totalAmountNp = request.POST['amountnp']
-             bill.totalAmountInLetters = request.POST['amountletter']
-             bill.meta_ref = ServiceMeta.objects.get(pk =request.POST['meta'])
-             bill.serviceRef = Service.objects.get(pk = request.POST['service_ref'])
-             bill.org_ref = Office.objects.get(pk =request.POST['office'])
-             bill.payment_method = PaymentMethod.objects.get(pk = request.POST['payment'])
-             bill.token = request.POST['token']
-             if request.POST['status'] == 't':
-                 bill.complete = True
-             else:
-                 bill.complete = False
+            try:
+                bill = Bill()
+                bill.fyRef = FY.objects.get(pk = request.POST['fy_ref'])
+                bill.billNo = request.POST['current_rasid_en']
+                bill.billNoNp  = request.POST['current_rasid_np']
+                bill.transactionDateNp = request.POST['trans_date_np']
+                bill.clientName  =request.POST['customer_name']
+                bill.address = request.POST['customer_address']
+                bill.contact = request.POST['customer_contact']
+                bill.totalAmount = request.POST['amount']
+                bill.totalAmountNp = request.POST['amountnp']
+                bill.totalAmountInLetters = request.POST['amountletter']
+                bill.meta_ref = ServiceMeta.objects.get(pk =request.POST['meta'])
+                bill.serviceRef = Service.objects.get(pk = request.POST['service_ref'])
+                bill.org_ref = Office.objects.get(pk =request.POST['office'])
+                bill.payment_method = PaymentMethod.objects.get(pk = request.POST['payment'])
+                bill.token = request.POST['token']
+                if request.POST['status'] == 't':
+                    bill.complete = True
+                else:
+                    bill.complete = False
 
-             bill.user = request.user
-             bill.save()
-             new_val = int(request.POST['current_rasid_en'])+1
-             RasidAllocation.objects.filter(officeRef=Office.objects.get(pk =request.POST['office'])).update(currentRasid=new_val)
-             base_url = reverse('printbill')  # 1 /products/
-             query_string =  urlencode({'id': bill.id})  # 2 category=42
-             url = '{}?{}'.format(base_url, query_string)
-             return redirect(url)
+                bill.user = request.user
+                bill.save()
+                new_val = int(request.POST['current_rasid_en'])+1
+                RasidAllocation.objects.filter(officeRef=Office.objects.get(pk =request.POST['office'])).update(currentRasid=new_val)
+                base_url = reverse('printbill')  
+                query_string =  urlencode({'id': bill.id})  
+                url = '{}?{}'.format(base_url, query_string)
+                return redirect(url)
+            except Exception as e:
+                base_url = reverse('revhome')  
+                query_string =  urlencode({'status': 'error','message':e})  
+                url = '{}?{}'.format(base_url, query_string)
+                return redirect(url)
 
      else :
           return redirect('validate')
@@ -500,7 +506,7 @@ def printBill(request):
     id = request.GET.get('id')
     r = request.GET.get('ref')
     if r == 'online':
-        data = Bill.objects.filter(pk = id).values('billNo').annotate(bill = F('billNo'),service = F('serviceRef__serviceName'),amount = F('serviceRef__serviceCharge'),office = F('org_ref__officeName'),officeAddress = F('org_ref__officeAddress'),user =F('user__first_name')).values('bill','service','amount','totalAmountNp','totalAmountInLetters','office','officeAddress','user','transactionDateNp','clientName','address','contact')
+        data = Bill.objects.filter(pk = id).filter(complete = True).values('billNo').annotate(bill = F('billNo'),service = F('serviceRef__serviceName'),amount = F('serviceRef__serviceCharge'),office = F('org_ref__officeName'),officeAddress = F('org_ref__officeAddress'),user =F('user__first_name')).values('bill','service','amount','totalAmountNp','totalAmountInLetters','office','officeAddress','user','transactionDateNp','clientName','address','contact')
         print(data)
     else:
         data = Bill.objects.filter(pk = id).values('billNo').annotate(service = F('serviceRef__serviceName'),amount = F('serviceRef__serviceCharge'),office = F('org_ref__officeName'),officeAddress = F('org_ref__officeAddress'),user =F('user__first_name')).values('service','amount','totalAmountNp','totalAmountInLetters','office','officeAddress','user','transactionDateNp','clientName','address','contact')
