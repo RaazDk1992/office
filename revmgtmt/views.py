@@ -64,7 +64,7 @@ def addServiceMeta(request):
     return render(request,'revenue\\servicemeta.html',{'meta_form':form})
 
 def addService(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         qset = ServiceMeta.objects.values_list('id','servicecategory')
         servicelist = Service.objects.all().values('id','meta_ref__ref_no','meta_ref__servicecategory','serviceSub_ref','serviceName','serviceCharge','serviceChargeNp','isActive')
         optionlist = [(x.get('id'), x.get('servicecategory')) for x in qset.values()]
@@ -81,7 +81,7 @@ def addService(request):
 
 def editService(request):
     
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         base_url = reverse('service')
         new_ref = request.POST['service_subref_id']
         new_service      = request.POST['service_name']
@@ -102,7 +102,7 @@ def editService(request):
 
 
 def toggleService(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         base_url = reverse('service')
         service_ref = request.POST['ref']
         s = Service.objects.get(pk = service_ref)
@@ -115,53 +115,57 @@ def toggleService(request):
         return redirect('validate')
         
 def rasidAllocation(request):
-    rasidform = rasidAllocationForm()
-    d= RasidAllocation.objects.select_related('officeRef').values('id','fyRef__fy_np','officeRef__officeName','lowerRasid','upperRasid','currentRasid').filter(isActive=True)
-    e= RasidAllocation.objects.select_related('officeRef').values('id','fyRef__fy_np','officeRef__officeName','lowerRasid','upperRasid','currentRasid').filter(isActive=False)
-    if request.POST:
-        form = rasidAllocationForm(request.POST)
+   if request.user.is_authenticated and request.user.is_superuser:
+        rasidform = rasidAllocationForm()
+        d= RasidAllocation.objects.select_related('officeRef').values('id','fyRef__fy_np','officeRef__officeName','lowerRasid','upperRasid','currentRasid').filter(isActive=True)
+        e= RasidAllocation.objects.select_related('officeRef').values('id','fyRef__fy_np','officeRef__officeName','lowerRasid','upperRasid','currentRasid').filter(isActive=False)
+        if request.POST:
+            form = rasidAllocationForm(request.POST)
         if form.is_valid():
             form.save()
-    return render(request,'revenue\\rasidallocation.html',{'rform':rasidform, 'd':d,'e':e})
+        return render(request,'revenue\\rasidallocation.html',{'rform':rasidform, 'd':d,'e':e})
 
 def rasidManagement(request):
-    rid = request.POST['rasid_id']
-    r = RasidAllocation.objects.get(pk = rid)
-    r.isActive = not r.isActive
-    r.save()
-    base_url = reverse('rasidallocation')  
-    query_string =  urlencode({'status': 'success'})  
-    url = '{}?{}'.format(base_url, query_string)
-    return redirect(url)
+    if request.user.is_authenticated and request.user.is_superuser:
+        rid = request.POST['rasid_id']
+        r = RasidAllocation.objects.get(pk = rid)
+        r.isActive = not r.isActive
+        r.save()
+        base_url = reverse('rasidallocation')  
+        query_string =  urlencode({'status': 'success'})  
+        url = '{}?{}'.format(base_url, query_string)
+        return redirect(url)
 
 
 def assign(request):
-    assF = UserManagementForm()
+    if request.user.is_authenticated and request.user.is_superuser:
+        assF = UserManagementForm()
     #print(assignForm)
-    d = relmap.objects.select_related('offRef','uRef').values('uRef__first_name','offRef__officeName')
-    inactive = User.objects.filter(is_active = False)
-    print(inactive)
-    
-    if request.POST:
-        form = UserManagementForm(request.POST)
+        d = relmap.objects.select_related('offRef','uRef').values('uRef__first_name','offRef__officeName')
+        inactive = User.objects.filter(is_active = False)
+        print(inactive)
         
-        if form.is_valid():
-            form.save()
-    return render(request,'revenue\\usermanagement.html',{'uform':assF, 'd':d, 'inactive':inactive})
+        if request.POST:
+            form = UserManagementForm(request.POST)
+            
+            if form.is_valid():
+                form.save()
+        return render(request,'revenue\\usermanagement.html',{'uform':assF, 'd':d, 'inactive':inactive})
 
 
 def addOffice(request):
-    off = OfficeForm()
-    officelist = Office.objects.filter(is_active = True)
-    
-    if request.POST:
-        form = OfficeForm(request.POST)
-        if form.is_valid():
-            form.save()
-    return render(request,'revenue\\office.html',{'xform':off, 'list':officelist})
+   if request.user.is_authenticated and request.user.is_superuser:
+        off = OfficeForm()
+        officelist = Office.objects.filter(is_active = True)
+        
+        if request.POST:
+            form = OfficeForm(request.POST)
+            if form.is_valid():
+                form.save()
+        return render(request,'revenue\\office.html',{'xform':off, 'list':officelist})
 
 def acceptReject(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         if request.method == 'POST':
            task = request.POST['task']
            uref = request.POST['ref']
@@ -212,7 +216,7 @@ def logout(request):
     return redirect('validate')
 
 def addFy(request):
-   if request.user.is_authenticated:
+   if request.user.is_authenticated and request.user.is_superuser:
        form = FYform()
        d = FY.objects.all().order_by('-id')
        if request.POST:
@@ -224,7 +228,7 @@ def addFy(request):
         return redirect('validate')
 
 def disableFy(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
         try:
             fy = request.POST['fy_ref']
             x = FY.objects.filter(id=fy).update(isactive=False)
@@ -296,7 +300,7 @@ def tokenSearch(request):
 def accountSettings(request):
     pass
 def estimate(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser:
       # m = ServiceMeta.objects.annotate(instances = FilteredRelation('service',condition=Q(service__isActive=True))).values('id','ref_no','servicecategory','service__serviceSub_ref','service__serviceName')
        meta = ServiceMeta.objects.all()
        
@@ -462,41 +466,43 @@ def addBill(request):
 
 def updateBill(request):
     
-    try:
-        ref = request.POST['ref']
-        newName = request.POST['new_cust_name']
-        newAddress = request.POST['new_cust_address']
-        newContact = request.POST['new_cust_contact']
-        x = Bill.objects.filter(id=ref).update(clientName=newName,address=newAddress,contact=newContact)
-        if x > 0:
-            query_string =  urlencode({'status':'success'}) 
-        else:
-            query_string =  urlencode({'status':'failed'}) 
-    except Exception as e:
+   if request.user.is_authenticated:
+        try:
+            ref = request.POST['ref']
+            newName = request.POST['new_cust_name']
+            newAddress = request.POST['new_cust_address']
+            newContact = request.POST['new_cust_contact']
+            x = Bill.objects.filter(id=ref).update(clientName=newName,address=newAddress,contact=newContact)
+            if x > 0:
+                query_string =  urlencode({'status':'success'}) 
+            else:
+             query_string =  urlencode({'status':'failed'}) 
+        except Exception as e:
          query_string =  urlencode({'status':'error','message':e}) 
-    base_url = reverse('revhome') 
-    url = '{}?{}'.format(base_url, query_string)
-    return redirect(url)
+        base_url = reverse('revhome') 
+        url = '{}?{}'.format(base_url, query_string)
+        return redirect(url)
 
 
 def disableBill(request):
-    ref = request.POST['rasid_to_cancel']
-    reason = request.POST['cancellation_reason']
-    try:
-        x = Bill.objects.filter(pk  = ref).update(isActive=False)
-        if(x>0):
-            c = Cancelled()
-            c.rasidRef = Bill.objects.get(pk=ref)
-            c.Remarks = reason
-            y = c.save()
-            query_string =  urlencode({'status':'success'})
-    except Exception as e:
-         print(e)
-         query_string =  urlencode({'status':'error','message':e})
+    if request.user.is_authenticated:
+        ref = request.POST['rasid_to_cancel']
+        reason = request.POST['cancellation_reason']
+        try:
+            x = Bill.objects.filter(pk  = ref).update(isActive=False)
+            if(x>0):
+                c = Cancelled()
+                c.rasidRef = Bill.objects.get(pk=ref)
+                c.Remarks = reason
+                y = c.save()
+                query_string =  urlencode({'status':'success'})
+        except Exception as e:
+            print(e)
+            query_string =  urlencode({'status':'error','message':e})
 
-    base_url = reverse('revhome') 
-    url = '{}?{}'.format(base_url, query_string)
-    return redirect(url)
+        base_url = reverse('revhome') 
+        url = '{}?{}'.format(base_url, query_string)
+        return redirect(url)
 
 
 
