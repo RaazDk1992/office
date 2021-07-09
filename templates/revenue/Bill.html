@@ -256,33 +256,21 @@
 									{{d.service}}
 								</td>
 								<td>{{details.count}}</td>
-								<td>{{d.amount}}</td>
+								<td>{{d.totalAmountNp}}/-</td>
 							</tr>
 							
 							
 						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3" style="text-align: center;">
+									<span style="font-weight: bold;">अक्षेरेपी रु. &nbsp;</span><span>{{d.totalAmountInLetters}} मात्र/-</span>
+								</td>
+							</tr>
+						</tfoot>
 					</table>
 				</div>
-				<div class="inv-footer">
-					<div><!-- required --></div>
-					<div>
-						<table>
-							<tr>
-								<th>जम्मा</th>
-								<td>{{d.totalAmountNp}}</td>
-							</tr>
-							<tr>
-								<th>अक्षेरेपी</th>
-								<td>{{d.totalAmountInLetters}}</td>
-							</tr>
-							<tr>
-								<th>मिति</th>
-								<td>{{d.transactionDateNp}}</td>
-							</tr>
-							
-						</table>
-					</div>
-				</div>
+				
 			</div>
 
 			{% if ref == 'online'%}
