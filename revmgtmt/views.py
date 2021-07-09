@@ -65,15 +65,24 @@ def addServiceMeta(request):
 
 def addService(request):
     if request.user.is_authenticated and request.user.is_superuser:
+        base_url = reverse('service')
         qset = ServiceMeta.objects.values_list('id','servicecategory')
         servicelist = Service.objects.all().values('id','meta_ref__ref_no','meta_ref__servicecategory','serviceSub_ref','serviceName','serviceCharge','serviceChargeNp','isActive')
         optionlist = [(x.get('id'), x.get('servicecategory')) for x in qset.values()]
         form = ServiceForm()
         if request.POST:
-            form = ServiceForm(request.POST)
-            if form.is_valid():
-                form.save()
-                
+            try:
+                form = ServiceForm(request.POST)
+                if form.is_valid():
+                    f =  form.save()
+                if f != None:
+                        query_string =  urlencode({'status': 'success'})
+                else:
+                        query_string =  urlencode({'status': 'fail'})
+            except Exception as e:
+                query_string =  urlencode({'status': 'error', 'message':e})
+            url = '{}?{}'.format(base_url, query_string)
+            return redirect(url)
         
         return render(request,'revenue\\newservice.html',{'service_form':form,'s':servicelist})
     else :
@@ -121,8 +130,8 @@ def rasidAllocation(request):
         e= RasidAllocation.objects.select_related('officeRef').values('id','fyRef__fy_np','officeRef__officeName','lowerRasid','upperRasid','currentRasid').filter(isActive=False)
         if request.POST:
             form = rasidAllocationForm(request.POST)
-        if form.is_valid():
-            form.save()
+            if form.is_valid():
+                form.save()
         return render(request,'revenue\\rasidallocation.html',{'rform':rasidform, 'd':d,'e':e})
 
 def rasidManagement(request):
@@ -351,7 +360,7 @@ def analysis(request):
             data['ref'] = m.ref_no
             data['meta'] = m.servicecategory
             e = Estimated.objects.filter(fyref__isactive = True, meta_ref= m.id).values('meta_ref').annotate(e = Sum('metawise')).values('e').first()
-            c = Bill.objects.filter(fyRef__isactive = True, meta_ref=m.id,isActive=True, complete = True).values('meta_ref').annotate(t = Sum('totalAmount')).values('t')
+            c = Bill.objects.filter(fyRef__isactive = True, meta_ref=m.id,isActive=True).values('meta_ref').annotate(t = Sum('totalAmount')).values('t')
             r = list(c[:1])
             
             if e != None:

@@ -114,6 +114,10 @@
 				<div id="darta_section" class="current view">
 
 					<div class="container">
+
+						<div class="holder" id="response_container" style="position: fixed;top: 50%;left: 50%;">
+							
+						</div>
 						<form class="form" action="addservice" method="POST">
 							{% csrf_token %}
 
@@ -130,7 +134,11 @@
 	
 						{% endblock %}
 
-						<input type="submit" name="addFY" value="Go"/>
+						<input type="submit" name="addFY" value="Go"/> 
+							<div class="alert" id="service_add" style="display: inline-block;" id="msg">
+								<span id="status"></span> <span id="message"></span>
+							</div>
+					
 						</form>
 						<hr>
 						<div id="service_wrapper">
@@ -247,6 +255,23 @@
 	
 				});
 			
+				let searchParams = new URLSearchParams(window.location.search)
+				if(searchParams.has('status')){
+
+					let stat = searchParams.get('status')
+					if (stat == 'success'){
+
+
+					}else if(stat == 'fail'){
+
+					}else if(stat == 'error'){
+
+					}
+				}
+				
+				
+
+
 
             });
 
