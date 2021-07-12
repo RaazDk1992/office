@@ -380,7 +380,7 @@ def analysis(request):
             for s in services:
                 d =dict()
                 ex = Estimated.objects.filter(fyref__isactive = True, service_ref= s.id).values('service_ref').annotate(e = Sum('servicewise')).values('e','service_ref__serviceSub_ref')[0]
-                co = Bill.objects.filter(fyRef__isactive = True,complete = True, serviceRef=s.id,isActive=True).values('serviceRef').annotate(t = Sum('totalAmount'))
+                co = Bill.objects.filter(fyRef__isactive = True, serviceRef=s.id,isActive=True).values('serviceRef').annotate(t = Sum('totalAmount'))
                 d['ref'] = ex['service_ref__serviceSub_ref']
                 d['service'] = s.serviceName
                 d['expected'] = ex['e']
