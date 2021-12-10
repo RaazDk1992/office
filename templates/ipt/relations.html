@@ -1,0 +1,214 @@
+{% load static %}
+{% static "icons" as BASE_URL %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <script src="{% static 'scripts/jquery.js' %} "></script>
+        <script src="{% static 'boot/js/bootstrap.js' %} "></script>    
+        <script src="{% static 'scripts/popper.js' %} "></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--========== BOX ICONS ==========-->
+
+        <!--========== CSS ==========-->
+        <link rel="stylesheet" href="{% static 'mainmenu/css/styles.css' %}">
+
+        <title>Lekbeshi RMS </title>
+
+
+        <style>
+
+            .view{
+                position: absolute;
+                left: 5%;
+                top: 10%;
+                width: 90%;
+                height: 90%;
+                display: none;
+            }
+            .current{
+                display: block;
+            }
+
+
+
+        </style>
+    </head>
+    <body>
+        <!--========== HEADER ==========-->
+		{% if request.user.is_authenticated %}
+		<header class="header">
+            <div class="header__container">
+                <img src="assets/img/perfil.jpg" alt="" class="header__img">
+
+				<div id="user_info" style="position: absolute; left: 90%;">{{request.user.username}}
+					<a href="user/logout">logout</a>
+				</div>
+
+                <a href="#" class="header__logo navigation_link">Lekbeshi Municipality RMS </a>
+               
+				<form class="form-inline" action="archivesearch" method="POST">
+					{% csrf_token %}
+					<div class="header__search">
+						<input type="search" id="dms_search" name="dms_search" placeholder="Search" class="header__input">
+						<a href="#" data-toggle="modal" data-target="#myModal"><i class=" fa fa-ellipsis-v"></i></a>
+					</div>
+					<button class="btn btn-default"  type="submit" name="btn_search"><i class="fa fa-search"></i></button>
+				</form>
+    
+                <div class="header__toggle">
+                    <i class='bx bx-menu' id="header-toggle"></i>
+                </div>
+            </div>
+        </header>
+
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Search</h4>
+				</div>
+				<div class="modal-body">
+					
+						
+						<input type="text" value="२०७३-२-२३" name="date" id="from-picker">
+					
+					
+						<input type="text" value="" name="date" id="to-picker">
+				
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
+		  
+		</div>
+		
+
+        <!--========== NAV ==========-->
+        {% block menu %}
+        {% include "revenue/menu.html" %}
+    {% endblock %}
+        <!--========== CONTENTS ==========-->
+        <main>
+            <div id="main_content" class="view" style="left:8%;">
+
+
+				<div class="container">
+					<form class="form form-horizontal" action="relations" method="POST">
+						{% csrf_token %}
+
+
+						{% block content%}
+
+						{% for field in ref %}
+
+						<div class="form-group">
+							
+							{{field.label_tag }}{{ field }}
+						</div>
+
+						{% endfor %}
+
+					{% endblock %}
+
+					<input type="submit" name="addFY" value="Go"/>
+					</form>
+				</div>
+<hr>
+				<table class="table">
+					<thead>
+						<tr>
+							<td>आ व</td>
+							<td>सक्रिय</td>
+							<td>कार्य</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for x in d %}
+
+						<form action="disablefy" id="f{{x.id}}" method="POST">
+							{% csrf_token %}
+							<tr>
+								
+								<td>{{x.fy_np}}<input type="hidden" name="fy_ref" value="{{x.id}}"/></td>
+							{% if x.isactive%}
+							<td style="color: seagreen;"><i class="fa fa-check-circle"></i></td>
+							<td><a class="action disable" href="#" data-ref="{{x.id}}" style="color: red;"><i class="fa fa-minus-circle" ></i></a></td>
+							{%else%}
+							<td style="color: red;"><i class="fa  fa-arrow-circle-down"></i></td>
+							<td></td>
+							{% endif %}
+						
+							</tr>
+
+						</form>
+
+						{% endfor %}
+
+					</tbody>
+
+				</table>
+				
+			</div>
+            
+        </main>
+
+		{% endif %}
+        <!--========== MAIN JS ==========-->
+        <script src="{% static 'mainmenu/js/main.js' %}"></script>
+	
+        <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
+    </body>
+
+    <script>
+
+		/**
+		* Section visible logic
+		**/
+			var now
+            $(document).ready(function(){
+
+				 now = $("#main_content").addClass('current');
+                $('.navigation_link').click(function(e){
+					now.removeClass('current');
+                   view = $(this).data("view");
+                 $('#'+view).addClass('current');
+				 now = $("#"+view)
+                });
+
+				/**
+				* Toggle button events
+				*/
+
+				$('.toggle-btn').click(function(e){
+	
+					$(this).toggleClass(".toggle-btn active");
+					$("#darta_section").toggleClass('current');
+					$("#chalani_section").toggleClass('current');
+	
+				});
+
+
+				
+			
+
+            });
+
+		/**
+		*Calendar functions 
+		*
+		**/	
+
+		
+ 
+ </script>
+</html>

@@ -1,0 +1,226 @@
+{% load static %}
+{% static "icons" as BASE_URL %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <script src="{% static 'scripts/jquery.js' %} "></script>
+        <script src="{% static 'boot/js/bootstrap.js' %} "></script>    
+        <script src="{% static 'scripts/popper.js' %} "></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--========== BOX ICONS ==========-->
+
+        <!--========== CSS ==========-->
+        <link rel="stylesheet" href="{% static 'mainmenu/css/styles.css' %}">
+
+        <title>Lekbeshi RMS </title>
+
+
+        <style>
+
+            .view{
+                position: absolute;
+                left: 5%;
+                top: 10%;
+                width: 90%;
+                height: 90%;
+                display: none;
+            }
+            .current{
+                display: block;
+            }
+
+
+
+        </style>
+    </head>
+    <body>
+        <!--========== HEADER ==========-->
+		{% if request.user.is_authenticated %}
+		<header class="header">
+            <div class="header__container">
+                <img src="assets/img/perfil.jpg" alt="" class="header__img">
+
+				<div id="user_info" style="position: absolute; left: 90%;">{{request.user.username}}
+					<a href="user/logout">logout</a>
+				</div>
+
+                <a href="#" class="header__logo navigation_link">Revenue management ystem </a>
+               
+				<form class="form-inline" action="archivesearch" method="POST">
+					{% csrf_token %}
+					<div class="header__search">
+						<input type="search" id="dms_search" name="dms_search" placeholder="Search" class="header__input">
+						<a href="#" data-toggle="modal" data-target="#myModal"><i class=" fa fa-ellipsis-v"></i></a>
+					</div>
+					<button class="btn btn-default"  type="submit" name="btn_search"><i class="fa fa-search"></i></button>
+				</form>
+    
+                <div class="header__toggle">
+                    <i class='bx bx-menu' id="header-toggle"></i>
+                </div>
+            </div>
+        </header>
+
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Search</h4>
+				</div>
+				<div class="modal-body">
+					
+						
+						<input type="text" value="२०७३-२-२३" name="date" id="from-picker">
+					
+					
+						<input type="text" value="" name="date" id="to-picker">
+				
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
+		  
+		</div>
+		
+
+        <!--========== NAV ==========-->
+
+        {% if request.user.is_superuser %}
+
+        {% block adminmenu %}
+        {% include "revenue/adminmenu.html" %}
+        {% endblock %}
+
+        {% else %}
+
+        {% block menu %}
+        {% include "revenue/menu.html" %}
+        {% endblock %}
+        {% endif %}
+       
+        <!--========== CONTENTS ==========-->
+        <main>
+            <div id="main_content" class="view" style="left:8%;">
+
+				
+				<div id="darta_section" class="current view">
+
+					<div class="container">
+						<form class="form" action="" method="POST">
+							{% csrf_token %}
+
+
+							{% block content%}
+	
+							{% for field in xform %}
+
+							<div class="form-group">
+								
+								{{field.label_tag }} {{ field }}
+							</div>
+
+							{% endfor %}
+	
+						{% endblock %}
+
+						<input type="submit" name="addOffice" value="थप्नुहोस्"/>
+
+						</form>
+
+
+                        <div id="office_list">
+                            {% if list.count > 0 %}
+                            <table class="table" id="office_table">
+
+                                <thead>
+                                    <th>Id</th>
+                                    <th>कार्यालयको नाम</th>
+                                    <th>कार्यहरु</th>
+
+                                    <tbody>
+                                        {% for l in list %}
+                                            <tr>
+                                                <td>{{l.id}}</td>
+                                                <td>{{l.officeName}}</td>
+                                                <td>--</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </thead>
+                            </table>
+
+                            {% endif %}
+                        </div>
+
+                        {% if request.session.refer == 'setup'%}
+
+                        {% block training %}
+                            {% include "revenue/trainingsession.html" %}
+                        {% endblock %}
+                        {%endif %}
+                           
+					</div>
+
+					
+				</div>
+				
+
+				
+
+				
+                
+            </div>
+            
+        </main>
+
+		{% endif %}
+        <!--========== MAIN JS ==========-->
+        <script src="{% static 'mainmenu/js/mainmenuscript.js' %}"></script>
+		
+        <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+       
+        <link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
+    </body>
+
+    <script>
+
+
+		/**
+		* Section visible logic
+		**/
+			var now
+            $(document).ready(function(){
+
+				 now = $("#main_content").addClass('current');
+                $('.navigation_link').click(function(e){
+					now.removeClass('current');
+                   view = $(this).data("view");
+                 $('#'+view).addClass('current');
+				 now = $("#"+view)
+                });
+			
+
+
+                $('.decision').click(function(e){
+
+                    $('#des').val($(this).attr('name'))
+
+                });
+
+            });
+
+	
+		
+
+ 
+ </script>
+</html>

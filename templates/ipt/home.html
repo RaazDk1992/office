@@ -1,0 +1,431 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>IPT</title>
+  <script src="{% static 'scripts/jquery.js' %} "></script>   
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+<link rel="stylesheet" href="{% static 'ipt/homestyle.css' %}">
+<link rel="stylesheet" href="{% static 'font/css/font-awesome.css' %}">
+
+</head>
+<body>
+
+
+<!--PEN HEADER-->
+
+<!--PEN CONTENT     -->
+<div class="content">
+  <!--content inner-->
+  <div class="content__inner">
+    <div class="container">
+      <!--content title-->
+      <!--animations form-->
+      <form class="pick-animation my-4" style="visibility: hidden;">
+        <div class="form-row">
+          <div class="col-5 m-auto">
+            <select class="pick-animation__select form-control">
+              <option value="scaleIn" >ScaleIn</option>
+              <option value="scaleOut">ScaleOut</option>
+              <option value="slideHorz" selected="selected">SlideHorz</option>
+              <option value="slideVert">SlideVert</option>
+              <option value="fadeIn">FadeIn</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <!--content title-->
+     
+    </div>
+    <div class="container overflow-hidden">
+      <!--multisteps-form-->
+      <div class="multisteps-form">
+        <!--progress bar-->
+        <div class="row">
+          <div class="col-12 col-lg-8 ml-auto mr-auto mb-4">
+            <div class="multisteps-form__progress">
+              <button class="multisteps-form__progress-btn js-active" type="button" title="User Info">ब्यक्तिगत विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Address">पारिवारिक विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Order Info">भुमी सम्बन्धि विवरण</button>
+              <button class="multisteps-form__progress-btn" type="button" title="Comments">भौतिक संरचना        </button>
+            </div>
+          </div>
+        </div>
+        <!--form panels-->
+        <div class="row">
+          <div class="col-12 col-lg-8 m-auto">
+            <form id="personal_details_f" class="multisteps-form__form" action="personalinfo" method="POST">
+              {% csrf_token %}
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">ब्यक्तिगत विवरण</h3>
+                <div class="multisteps-form__content">
+                  <div class="form-row mt-3">
+                    <div class="col-12 col-sm-6">
+                      {{pform.fullname}}
+                    </div>
+                    <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                     {{pform.address}}
+                    </div>
+                  </div>
+                  <div class="form-row mt-4">
+                    <div class="col-12 col-sm-6">
+                      {{pform.occ}}
+                    </div>
+                    <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                     {{pform.contact}}
+                    </div>
+                  </div>
+                  
+                  <div class="button-row d-flex mt-4">
+                    <input class="btn btn-primary ml-auto js-btn-next save-form" id="personal" type="submit" value="Next"/>
+                  </div>
+                </div>
+              </div>
+            </form>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">पारिवारिक विवरण </h3> - <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;"><a href="#" class="addRow" data-form="members_form"><i class="fa fa-user-plus"></i></a></span>
+                <form id="form-container" action="familymembers" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS_F">
+                    <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS_F">
+                    <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS_F">
+                    <input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS_F">
+                {% for form in formset %}
+                 
+                <div class="form-row mt-4 members_form">
+                  {{form.familyHead}}
+                  {% if forloop.first %}
+                  {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                   {% endif %}
+                  <div class="col-12 col-sm-5">
+                    {{form.fullName}}
+                  </div>
+                  <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                    {{form.relation}}
+                  </div>
+                  <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                    {{form.Occupation}}
+                  </div>
+                </div>
+                {%endfor %}
+                <div id="newRow"></div>
+                <div class="button-row d-flex mt-4">
+                  <input class="btn btn-primary ml-auto js-btn-next save-form" id="family_details" type="submit" value="Next"/>
+                </div>
+                </form>
+              </div>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">भुमी सम्बन्धि विवरण</h3> <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="lands_form">+</a></span>
+                <div class="multisteps-form__content">
+                  <form id="form-container" class="form form-horizontal" action="landdetails" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS_L">
+                    <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS_L">
+                    <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS_L">
+                    <input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS_L">
+                    
+                    {% for form in ldf%}
+
+                    <div class="lands_form">
+                      <div class="col-12 col-sm-1">
+                         
+                        {{form.owner}}
+                      </div>
+                      <div class="row">
+  
+                        <div class="col-12 col-sm-2">
+                          {{form.kitta.label}}
+                          {{form.kitta}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.unit.label}}
+                          {{form.unit}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.usage.label}}
+                          {{form.usage}}
+                        </div>
+                        <div class="col-12 col-sm-3">
+                          {{form.accessibleToRoad.label}}
+                          {{form.accessibleToRoad}}
+                        </div>
+                     
+                      </div>
+                      <br>
+                      <div class="row">
+  
+                        <div class="col-12 col-sm-2">
+                          {{form.area.label}}
+                          {{form.area}}
+                        </div>
+  
+                       
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.pricePerUnit.label}}
+                          {{form.pricePerUnit}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.property_value.label}}
+                          {{form.property_value}}
+                        </div>
+                     
+                      </div>
+
+
+
+                    </div>
+                    <div class="row" id="new_land_row">
+                      
+                    </div>
+                  
+                   
+                      <div class="button-row d-flex mt-4">
+                        <input class="btn btn-primary ml-auto js-btn-next save-form" id="land_details_save" type="submit" value="Next"/>
+                      </div>
+                      
+                  
+
+                    {% endfor %}
+                </form>
+                </div>
+              </div>
+              <!--single form panel-->
+              <div class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
+                <h3 class="multisteps-form__title">भौतिक संरचना</h3> <span id="current_p"></span><span style="position: absolute; left: 85%; top: 5%;font-size: 30px;"><a href="#" class="addRow" data-form="buildings_form">+</a></span>
+                <div class="multisteps-form__content">
+                  
+                  <form id="form-container" class="form form-horizontal" action="familymembers" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS_B">
+                    <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS_B">
+                    <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS_B">
+                    <input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS_B">
+                    
+                    {% for form in bdf%}
+
+                    <div class="buildings_form">
+                      <div class="col-12 col-sm-1">
+                         
+                        {{form.owner}}
+                      </div>
+                      <div class="row">
+  
+                        <div class="col-12 col-sm-2">
+                          {{form.landRef.label}}
+                          {{form.landRef}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.made_year.label}}
+                          {{form.made_year}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.occupiedArea.label}}
+                          {{form.occupiedArea}}
+                        </div>
+                     
+                      </div>
+                      <br>
+                      <div class="row">
+  
+                        <div class="col-12 col-sm-2">
+                          {{form.buildingType.label}}
+                          {{form.buildingType}}
+                        </div>
+  
+                        <div class="col-12 col-sm-2">
+                          {{form.buildingUsage.label}}
+                          {{form.buildingUsage}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.stories.label}}
+                          {{form.stories}}
+                        </div>
+                        <div class="col-6 col-sm-3 mt-4 mt-sm-0">
+                          {{form.price.label}}
+                          {{form.price}}
+                        </div>
+                     
+                      </div>
+
+
+
+                    </div>
+                    <div class="row" id="new_building_row">
+                      
+                    </div>
+                  
+
+                      <div class="button-row d-flex mt-4">
+                        <input class="btn btn-primary ml-auto js-btn-next save-form" id="building_details_save" type="submit" value="Next"/>
+                      </div>
+                      
+                   
+
+                    {% endfor %}
+                </form>
+
+
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+<script src="{% static 'ipt/homescript.js' %} "></script>
+
+</body>
+
+<script>
+
+
+  
+
+$(document).ready(function(e){
+
+
+  
+  $(".addRow").click(function (e) {
+
+      ref = $(this).data('form')
+
+      if(ref == 'members_form'){
+
+        f = document.querySelectorAll(".members_form")
+        totalForms = document.querySelector("#id_form-TOTAL_FORMS_F")
+
+        loc = $("#newRow")
+        add(f,loc,totalForms)
+      } else if (ref == 'lands_form'){
+
+        f = document.querySelectorAll(".lands_form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS_L")
+
+        loc = $("#new_land_row")
+        add(f,loc,totalForms)
+      } else if(ref == 'buildings_form'){
+
+        f = document.querySelectorAll(".buildings_form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS_B")
+
+        loc = $("#new_building_row")
+        add(f,loc,totalForms)
+
+      }
+
+       
+       
+    });
+
+  
+function add(formToChange,loc, totalForms){
+
+  fo = formToChange
+  let container = document.querySelector("#form-container")
+  let formNum = fo.length-1 // Get the number of the last form on the page with zero-based indexing
+  let newForm = fo[0].cloneNode(true)
+        let formRegex = RegExp(`form-(\\d){1}-`,'g') 
+        formNum++ //Increment the form number
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form numb
+        loc.append("<div></div>");
+        loc.append(newForm);
+        let tmp = $('.currentPerson:first').val()
+        $('.currentPerson').val(tmp)
+        totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
+
+}
+
+/**
+
+**/
+$(document).on('click', '#removeRow', function () {
+        $(this).closest('#inputFormRow').remove();
+    });
+
+
+
+
+/**
+ * 
+ * Stepwise form submit
+ * */
+$("form").submit(function(e){
+  e.preventDefault()
+});
+ $("#personal, #family_details, #land_details_save").click(function(e){
+
+  tgt = e.target
+  f = $(this.form)
+  $.ajax({
+        url : f.attr('action'), // the endpoint
+        type : f.attr('method'), // http method
+        dataType: 'json',
+			  contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+        data : f.serialize(), // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            
+            // log the returned json to the console
+            response = json
+
+           console.log(response)
+           
+            if(response.status == 'success'){
+              actvStep = getActiveStep(tgt);
+
+              if( actvStep == -1){
+                actvStep = actvStep+2
+              } else{
+                actvStep = actvStep+1
+              }
+             if(f.attr('action') == 'personalinfo'){
+
+                $(".currentPerson").val(response.person)
+                $("#current_p").text(response.name)
+                setActiveStep(1);
+                setActivePanel(1);
+
+             } else if(f.attr('action') == 'familymembers'){
+
+              setActiveStep(2);
+              setActivePanel(2);
+
+             } else if(f.attr('action') == 'landdetails'){
+
+              setActiveStep(3);
+              setActivePanel(3);
+
+             }
+              
+  
+
+             
+            }
+            
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+
+
+    });
+ });
+
+});
+</script>
+</html>
